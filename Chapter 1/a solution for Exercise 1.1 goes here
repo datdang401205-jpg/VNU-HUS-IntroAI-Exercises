@@ -1,0 +1,61 @@
+1.1 Thử nghiệm ChatGPT và Bard để xác định "không phải người": phương pháp và các nghiên cứu liên quan
+A. Phương pháp thực nghiệm (gợi ý thực hành)
+
+Chọn “starting question” (câu hỏi khởi đầu)
+Ví dụ: “Kể một câu chuyện ngắn về một nhân vật trên tàu lửa, thể hiện một cách bất ngờ cảm giác cô đơn nội tâm.”
+— câu hỏi mở buộc hệ thống suy nghĩ sáng tạo, duy trì ngữ cảnh và chiều sâu cảm xúc.
+
+Giao tiếp song song với ChatGPT và Bard
+
+Đồng thời hỏi cùng một câu hỏi (có thể copy prompt).
+
+Ghi lại thời gian hoặc số câu hỏi cần để bạn bắt đầu nghi ngờ đây là máy, không phải người.
+
+Đặc biệt chú ý đến các dấu hiệu như: lặp cấu trúc, trả lời quá hoàn hảo, quên thông tin, tốc độ trả lời đều đều không như người thật.
+
+Đánh giá Turing test (hệ thống có “qua mặt” hay không)
+Sau khi tương tác, tự đánh giá: liệu bạn có thể phân biệt hệ thống từ câu trả lời trong một cuộc đối thoại ngắn? Mức độ “giống người” đến đâu?
+
+B. Nghiên cứu hiện tại: LLM đã qua mặt Turing test?
+Nghiên cứu tại UC San Diego (2025)
+
+Kết quả nổi bật:
+
+Trong một “three-party Turing test” (người kiểm tra trò chuyện cùng lúc với một người và một LLM trong 5 phút), GPT-4.5 được đánh giá là human đến 73 % số lần — hơn cả người thật trung bình.
+
+LLaMa-3.1 đạt 56 %, tương đương với người thật trong nhiều trường hợp.
+
+Các mô hình cơ bản như ELIZA, GPT-4o chỉ đạt 23 % và 21 %.
+→ Đây là lần đầu tiên có bằng chứng thực nghiệm mạnh mẽ rằng một hệ thống giả lập (LLM) qua được Turing test chuẩn.
+
+arXiv
++1
+Live Science
+Wikipedia
+
+Nghiên cứu trước đó (2024) — hai bên tham gia (2-party test)
+
+GPT-4 được đánh giá là người ở mức 54 %, vượt trội so với ELIZA (22 %), nhưng vẫn thấp hơn mức trung bình của con người (67 %).
+
+arXiv
+Wikipedia
+
+Các phân tích và bình luận
+
+CACM (2024): các LLM tuy “hầu như thắng” trong các Turing test công khai, nhưng cần đánh giá thông minh qua các phương pháp khác.
+
+Communications of the ACM
+
+Arxiv (2025): Turing test vẫn có giá trị nếu được “nâng cấp” với thời gian tương tác dài hơn, đối tượng kiểm tra nhiều hơn, và sử dụng kiểm tra viên có kinh nghiệm.
+
+arXiv
+
+C. Tổng kết: Hệ thống có “qua được” Turing test hay không?
+
+Có, theo các thử nghiệm three-party, GPT-4.5 đã vượt qua — được đánh giá là người 73 % lần, thậm chí "giả người" tốt hơn cả người thật trung bình.
+
+GPT-4 cũng đã làm tốt trong các thử nghiệm 2-party (54 % “qua mặt”), nhưng chưa vượt con người.
+
+Tuy nhiên, các kết quả này không chứng minh “thông minh nội tại” — chỉ ra rằng mô hình có khả năng bắt chước, ngụy trang rất tinh vi.
+
+Có nhiều luồng ý kiến, quan điểm phản biện về giá trị thực sự của Turing test trong đánh giá AI.
