@@ -1,0 +1,67 @@
+import itertools
+
+def extract_vars(cnf):
+    """Lấy tập hợp các biến từ CNF"""
+    vars_set = set()
+    for clause in cnf:
+        for lit in clause:
+            if lit.startswith("¬"):
+                vars_set.add(lit[1:])
+            else:
+                vars_set.add(lit)
+    return sorted(vars_set)
+
+def eval_clause(clause, assignment):
+    """Đánh giá 1 clause với gán assignment"""
+    for lit in clause:
+        if lit.startswith("¬"):
+            var = lit[1:]
+            if not assignment[var]:
+                return True
+        else:
+            if assignment[lit]:
+                return True
+    return False
+
+def eval_cnf(cnf, assignment):
+    """Đánh giá CNF"""
+    return all(eval_clause(clause, assignment) for clause in cnf)
+
+def theorem_prover(cnf):
+    vars_list = extract_vars(cnf)
+    n = len(vars_list)
+    
+    all_assignments = list(itertools.product([False, True], repeat=n))
+    models = []
+    
+    for values in all_assignments:
+        assignment = dict(zip(vars_list, values))
+        if eval_cnf(cnf, assignment):
+            models.append(assignment)
+    
+    total_interpretations = 2 ** n
+    num_models = len(models)
+    
+    if num_models == total_interpretations:
+        status = "VALID (tautology / always true)"
+    elif num_models == 0:
+        status = "UNSATISFIABLE (always false)"
+    else:
+        status = "SATISFIABLE (true for some interpretations)"
+    
+    return {
+        "status": status,
+        "num_interpretations": total_interpretations,
+        "num_models": num_models,
+        "models": models
+    }
+
+# ----------------- Demo -----------------
+# CNF: (A ∨ ¬B) ∧ (B ∨ C)
+cnf_formula = [ {"A", "¬B"}, {"B", "C"} ]
+
+result = theorem_prover(cnf_formula)
+print("Status:", result["status"])
+print("Total interpretations:", result["num_interpretations"])
+print("Number of models:", result["num_models"])
+print("Example models:", result["models"][:5])  # in thử 5 mô hình
