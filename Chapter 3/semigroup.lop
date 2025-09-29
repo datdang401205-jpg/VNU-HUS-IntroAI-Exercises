@@ -1,1 +1,6 @@
 % Create a solution for Exercise 3.9(c), page 64
+e = n.
+<- a = b.
+m(m(X,Y),Z) = m(X,m(Y,Z)).
+m(e,X) = X.
+m(n,X) = n.
