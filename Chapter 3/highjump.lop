@@ -1,1 +1,7 @@
 % Create a solution for Exercise 3.9(a), page 64
+; B,A <- .
+; ~A,~B <- .
+; C,B <- .
+; ~B,~C <- .
+; A,C <- .
+; ~C,~A <- .
