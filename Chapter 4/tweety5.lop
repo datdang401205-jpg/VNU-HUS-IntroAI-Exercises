@@ -1,1 +1,16 @@
 % Create a solution for Exercise 4.3, page 73
+pyDatalog.clear()
+pyDatalog.create_terms('Bird, CanFly, Tweety, Penguin, X')
+
+CanFly(X) <= Bird(X)
+Bird('Tweety')
+
+print(CanFly('Tweety'))  # True ban đầu
+
+# Sau khi biết Tweety là chim cánh cụt
+pyDatalog.create_terms('Abnormal')
+CanFly(X) <= Bird(X) & ~Abnormal(X)
+Abnormal(X) <= Penguin(X)
+Penguin('Tweety')
+
+print(CanFly('Tweety'))  # False sau khi cập nhật
