@@ -1,1 +1,9 @@
 % Create a solution for Exercise 4.3, page 73
+from pyDatalog import pyDatalog
+pyDatalog.clear()
+pyDatalog.create_terms('Bird, CanFly, Tweety')
+
+Bird('Tweety')
+CanFly(X) <= Bird(X)
+
+print(CanFly('Tweety'))  # True
