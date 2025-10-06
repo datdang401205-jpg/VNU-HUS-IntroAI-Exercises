@@ -1,1 +1,11 @@
 % Create a solution for Exercise 4.3, page 73
+pyDatalog.clear()
+pyDatalog.create_terms('Bird, Abnormal, CanFly, Tweety, X')
+
+CanFly(X) <= Bird(X) & ~Abnormal(X)
+Abnormal(X) <= Penguin(X)
+Bird(X) <= Penguin(X)
+
+Penguin('Tweety')
+
+print(CanFly('Tweety'))  # False
