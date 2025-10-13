@@ -1,1 +1,26 @@
 % Create a solution for Exercise 5.4(b), page 88 
+PROLOG (SLD-resolution, procedural):
+
+Khi chạy ?- descendant(X,Y). Prolog sẽ sinh các cặp (X,Y) theo thứ tự mà nó khám phá bằng backtracking.
+
+Ví dụ (như sách minh họa), PROLOG có thể trả đầu tiên: X = oscar, Y = karen. rồi dừng (in Yes) trừ khi bạn yêu cầu backtracking tiếp (nhấn ;) để lấy lời giải kế tiếp. Tuy nhiên do đệ quy và thứ tự clauses, Prolog có thể:
+
+trả một số lượng giải (hoặc chỉ một) rồi loop/không dừng khi tìm kiếm các giải tiếp,
+
+hoặc cần chỉnh lại quy tắc / dùng memoization để liệt kê đầy đủ.
+
+Nói ngắn: PROLOG trả các cặp từng bước theo thứ tự khám phá và hành vi liệt kê tất cả phụ thuộc vào thứ tự clauses và chiến lược tìm kiếm — có thể không liệt kê hết nếu rơi vào vòng lặp.
+
+E (theorem prover, logic-oriented, complete search):
+
+E sẽ chứng minh tất cả những hệ quả logic (trong giới hạn search-control / resources của nó) hay ít nhất có khả năng chứng minh rằng các cặp descendant nhất định là hệ quả logic.
+
+Với truy vấn dạng biến descendant(X,Y) một theorem prover thường dẫn xuất (derive) toàn bộ (hoặc nhiều) cặp (X,Y) mà KB hàm ý, hoặc trả lời rằng KB ⊨ ∃X∃Y descendant(X,Y) và có thể xuất các bằng chứng cho từng cặp.
+
+E không gặp vấn đề vòng lặp do chiến lược depth-first cụ thể như Prolog, nên sẽ liệt kê / chứng minh các hậu quả đó theo cách khác (và cung cấp bằng chứng/chứng minh).
+
+Tóm tắt so sánh:
+
+PROLOG: procedural, trả lời bằng cách thực hiện truy vấn; dễ dừng sớm hoặc rơi vào loop; phù hợp để chạy chương trình và lấy một số cách giải.
+
+E: lý thuyết hơn, complete theo calculus, có thể chứng minh quan hệ mà PROLOG không tìm được do chiến lược tìm kiếm; phù hợp để kiểm chứng tính hệ quả logic.
