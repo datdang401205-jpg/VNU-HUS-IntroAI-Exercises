@@ -1,1 +1,10 @@
 % Create a solution for Exercise 5.4(a), page 88 
+Theorem prover E dùng một complete calculus (ví dụ resolution với chiến lược tìm kiếm hợp lý), nên nó chứng minh hậu tố logic: từ các facts child(...) và các quy tắc, E có thể dẫn luận rằng descendant(clyde,karen) là kết quả logic (E sẽ tìm chuỗi suy luận và chứng minh). Vì vậy E trả lời “entailed / provable” (tức là đúng).
+
+PROLOG sử dụng SLD-resolution với depth-first search cùng thứ tự clauses như trong file. Với quy tắc đệ quy descendant(X,Y) :- child(X,U,V), descendant(U,Y). và với tổ hợp quy tắc hoán vị child(X,Z,Y) :- child(X,Y,Z)., trình truy vấn của PROLOG rất dễ rơi vào vòng lặp vô hạn hoặc thử những nhánh không dẫn tới chứng minh trước khi đến nhánh đúng. Kết quả:
+
+Trong một số cấu hình/phiên bản Prolog và với thứ tự clauses như trên, truy vấn ?- descendant(clyde,karen). có thể không trả về (non-terminating) hoặc trả sai/không tìm thấy mặc dù thực sự KB hàm ý câu đó.
+
+Nếu thêm kỹ thuật memoization (vd. asserta để lưu các descendant đã suy ra) hoặc chỉnh thứ tự clauses / tái cấu trúc quy tắc, Prolog sẽ tìm được kết quả. (Sách cũng minh hoạ điều này.)
+
+Kết luận: E có khả năng chứng minh theo lý thuyết và không bị ảnh hưởng bởi chiến lược tìm kiếm depth-first cụ thể của PROLOG; đó là lý do E trả lời “đúng” còn PROLOG có thể bị sa lầy (loop) hoặc không tìm ra.
