@@ -1,0 +1,202 @@
+import heapq
+import time
+from copy import deepcopy
+
+class PuzzleState:
+    def __init__(self, board, parent=None, move=None, depth=0):
+        self.board = board
+        self.parent = parent
+        self.move = move
+        self.depth = depth
+        self.size = len(board)
+        
+    def __lt__(self, other):
+        return True
+    
+    def __eq__(self, other):
+        return self.board == other.board
+    
+    def __hash__(self):
+        return hash(str(self.board))
+    
+    def get_blank_position(self):
+        for i in range(self.size):
+            for j in range(self.size):
+                if self.board[i][j] == 0:
+                    return i, j
+    
+    def get_possible_moves(self):
+        moves = []
+        i, j = self.get_blank_position()
+        
+        # Possible moves: up, down, left, right
+        directions = [(-1, 0, 'UP'), (1, 0, 'DOWN'), (0, -1, 'LEFT'), (0, 1, 'RIGHT')]
+        
+        for di, dj, move_name in directions:
+            new_i, new_j = i + di, j + dj
+            if 0 <= new_i < self.size and 0 <= new_j < self.size:
+                new_board = deepcopy(self.board)
+                # Swap blank with adjacent tile
+                new_board[i][j], new_board[new_i][new_j] = new_board[new_i][new_j], new_board[i][j]
+                moves.append((PuzzleState(new_board, self, move_name, self.depth + 1), move_name))
+        
+        return moves
+    
+    def is_goal(self, goal):
+        return self.board == goal
+
+def h1_misplaced_tiles(current, goal):
+    """Heuristic 1: Count of misplaced tiles"""
+    misplaced = 0
+    for i in range(len(current.board)):
+        for j in range(len(current.board)):
+            if current.board[i][j] != 0 and current.board[i][j] != goal[i][j]:
+                misplaced += 1
+    return misplaced
+
+def h2_manhattan_distance(current, goal):
+    """Heuristic 2: Sum of Manhattan distances of all tiles to their goal positions"""
+    distance = 0
+    goal_positions = {}
+    
+    # Create mapping of value to goal position
+    for i in range(len(goal)):
+        for j in range(len(goal)):
+            goal_positions[goal[i][j]] = (i, j)
+    
+    # Calculate Manhattan distance for each tile
+    for i in range(len(current.board)):
+        for j in range(len(current.board)):
+            value = current.board[i][j]
+            if value != 0:  # Don't count the blank tile
+                goal_i, goal_j = goal_positions[value]
+                distance += abs(i - goal_i) + abs(j - goal_j)
+    
+    return distance
+
+def a_star_search(initial, goal, heuristic_func):
+    """A* search algorithm"""
+    open_set = []
+    closed_set = set()
+    
+    # Push initial state with f = g + h
+    initial_f = initial.depth + heuristic_func(initial, goal)
+    heapq.heappush(open_set, (initial_f, initial))
+    
+    nodes_expanded = 0
+    max_open_size = 0
+    
+    while open_set:
+        max_open_size = max(max_open_size, len(open_set))
+        
+        # Get state with lowest f value
+        current_f, current_state = heapq.heappop(open_set)
+        
+        if current_state.is_goal(goal):
+            return current_state, nodes_expanded, max_open_size
+        
+        if current_state in closed_set:
+            continue
+            
+        closed_set.add(current_state)
+        nodes_expanded += 1
+        
+        # Generate successors
+        for neighbor, move in current_state.get_possible_moves():
+            if neighbor in closed_set:
+                continue
+                
+            # Calculate f = g + h
+            f_value = neighbor.depth + heuristic_func(neighbor, goal)
+            heapq.heappush(open_set, (f_value, neighbor))
+    
+    return None, nodes_expanded, max_open_size
+
+def get_solution_path(goal_state):
+    """Reconstruct the solution path from goal to initial state"""
+    path = []
+    current = goal_state
+    
+    while current.parent is not None:
+        path.append((current.move, current.board))
+        current = current.parent
+    
+    path.reverse()
+    return path
+
+def print_board(board):
+    """Print the puzzle board in a readable format"""
+    for row in board:
+        print(' '.join(str(x) if x != 0 else ' ' for x in row))
+    print()
+
+def test_8_puzzle():
+    """Test the A* search with both heuristics on 8-puzzle examples"""
+    
+    # Test cases
+    test_cases = [
+        {
+            'name': 'Easy Case',
+            'initial': [[1, 2, 3], [4, 0, 6], [7, 5, 8]],
+            'goal': [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
+        },
+        {
+            'name': 'Medium Case', 
+            'initial': [[1, 2, 3], [0, 4, 6], [7, 5, 8]],
+            'goal': [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
+        },
+        {
+            'name': 'Hard Case',
+            'initial': [[1, 0, 3], [4, 2, 6], [7, 5, 8]],
+            'goal': [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
+        }
+    ]
+    
+    heuristics = [
+        ('h1 - Misplaced Tiles', h1_misplaced_tiles),
+        ('h2 - Manhattan Distance', h2_manhattan_distance)
+    ]
+    
+    for test_case in test_cases:
+        print(f"\n{'='*50}")
+        print(f"TEST CASE: {test_case['name']}")
+        print(f"{'='*50}")
+        
+        print("Initial State:")
+        print_board(test_case['initial'])
+        print("Goal State:")
+        print_board(test_case['goal'])
+        
+        for heuristic_name, heuristic_func in heuristics:
+            print(f"\nUsing {heuristic_name}:")
+            
+            initial_state = PuzzleState(test_case['initial'])
+            goal_board = test_case['goal']
+            
+            start_time = time.time()
+            result, nodes_expanded, max_open_size = a_star_search(initial_state, goal_board, heuristic_func)
+            end_time = time.time()
+            
+            if result:
+                solution_path = get_solution_path(result)
+                print(f"Solution found in {len(solution_path)} moves!")
+                print(f"Nodes expanded: {nodes_expanded}")
+                print(f"Maximum open set size: {max_open_size}")
+                print(f"Time taken: {end_time - start_time:.4f} seconds")
+                
+                # Print solution steps
+                print("\nSolution steps:")
+                current_state = PuzzleState(test_case['initial'])
+                print("Step 0 (Initial):")
+                print_board(current_state.board)
+                
+                for step, (move, board) in enumerate(solution_path, 1):
+                    print(f"Step {step}: Move {move}")
+                    print_board(board)
+            else:
+                print("No solution found!")
+            
+            print("-" * 30)
+
+if __name__ == "__main__":
+    test_8_puzzle()
