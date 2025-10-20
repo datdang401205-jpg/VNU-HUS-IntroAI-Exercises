@@ -83,3 +83,23 @@ def dls(state, visited, depth, limit):
             if path:
                 return [state] + path
     return None
+
+(b) Why DFS is not suitable for the 8-puzzle
+
+There are three main reasons:
+
+Huge Search Space
+
+The 8-puzzle has 9! = 362,880 possible states, and only half are solvable.
+DFS may go extremely deep into unpromising branches before finding a valid solution.
+
+No Backtracking Limit
+
+DFS explores one branch completely before trying another.
+In 8-puzzle, moves can easily cycle (e.g., swapping tiles back and forth),
+so without careful cycle checking, DFS may get stuck or loop forever.
+
+Non-Optimal Solution
+
+Even if DFS finds a solution, it is not guaranteed to be the shortest.
+BFS and IDS, by contrast, find minimal-move solutions.
